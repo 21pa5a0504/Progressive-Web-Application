@@ -16,3 +16,20 @@ this.addEventListener("fetch", (event) => {
     })
   );
 });
+
+
+this.addEventListener("activate", (event) => {
+  const cacheWhiteList = [];
+  cacheWhiteList.push(CACHE_NAME);
+  event.waitUntil(
+    caches.keys().then((cachesName) =>
+      Promise.all(
+        cachesName.map((cacheName) => {
+          if (!cacheWhiteList.includes(cacheName)) {
+            return caches.delete(cacheName);
+          }
+        })
+      )
+    )
+  );
+});
